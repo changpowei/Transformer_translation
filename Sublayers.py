@@ -26,8 +26,8 @@ def attention(q, k, v, d_k, mask=None, dropout=None):
     scores = torch.matmul(q, k.transpose(-2, -1)) /  math.sqrt(d_k)
     
     if mask is not None:
-        mask = mask.unsqueeze(1)
-        scores = scores.masked_fill(mask == 0, -1e9)
+        mask = mask.unsqueeze(1)        #(136, 1, 10, 10), 上三角矩陣，上三角形為0，下三角行為1。
+        scores = scores.masked_fill(mask == 0, -1e9)    #將mask值為0的地方的分數設定成超級小，後面做softmax機率就為0
     
     scores = F.softmax(scores, dim=-1)
     
